@@ -5,10 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>SaimaaSec</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font: 400 15px/1.8 "Lato", sans-serif;
+        color: #777;
+        background: #00141F;
+    }
+
+    .bgimg {
+        background-image: url("./img/saimaasec.jpg");
+        min-height: 80%;
+        position: relative;
+        opacity: 0.65;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .caption {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        color: #000;
+    }
+
+    .caption span.border {
+        background-color: #111;
+        color: #fff;
+        padding: 18px;
+        font-size: 25px;
+        letter-spacing: 10px;
+    }
+    </style>
   </head>
   <body>
-    <body bgcolor="black">
-	<script src="index.js"></script>
+    <div class="bgimg">
+        <div class="caption">
+        <span class="border">
+            SaimaaSec
+        </span>
+        </div>
+      </div>
+    <div style="color: #777;background-color:white;text-align:center;padding:50px 80px;text-align: justify;">
+        <h3 style="text-align:center;">About</h3>
+        <p style="text-align: center;">Information security community from the South-East Finland, mainly in Lappeenranta region.<br>We organise meetups and community events on a regular basis.<br>We welcome anyone interested on information security, whether you are a student, professional or just curious on infosec. Part of #citysec</p>
+        <h3 style="text-align:center;">Contact</h3>
+        <p style="text-align: center;"><b>info</b> at <b>saimaasec</b> dot <b>com</b></p>
+        <h3 style="text-align:center;">Social media</h3>
+        <p style="text-align: center;"><a href="https://twitter.com/saimaasec">Twitter</a> | Instagram</p>
+        <h3 style="text-align:center;">Events</h3>
+        <p style="text-align: center;"><a href="https://www.meetup.com/saimaasec/">Meetup</a></p>
+    </div>
   </body>
 </html>
