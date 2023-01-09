@@ -1,0 +1,228 @@
+/*Colors:
+Text blue:          #5afbca 
+Text red border:    #ea6459
+hoodie base:        #26444f
+hoodie shadow:      #1c303a
+background:         #091b24
+
+*/
+body, html {
+    height: 100%;
+    margin: 0;
+    font: 400 15px/1.8 "Lato", sans-serif;
+    color: #777;
+    background: #00141F;
+}
+
+
+/*MOBILE*/
+
+@media(max-width: 600px){
+        /*Navbar*/
+
+/* MOBILE MENU*/
+
+.navbar{
+    display: none;
+}
+/* MOBILE MENU*/
+
+    .navbar {
+        overflow: hidden;
+        background-color: #091b24;
+        position: fixed; 
+        top: 0; 
+        width: 100%; 
+        text-align: center;
+        border-bottom: 2px solid #1c303a;
+
+    }
+    
+    .navbar a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    
+    .navbar a:hover {
+        background: #5afbca;
+        color: #26444f;
+    }
+    
+    /*Navbar ends*/
+    
+    .bgimg {
+        background-image: url("../img/saimaasec.jpg");
+        min-height:80%;
+        min-height: 80%;
+        position: relative;
+        opacity: 0.65;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .caption {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        color: #000;
+    }
+
+    .caption span.border {
+        background-color: #111;
+        color: #fff;
+        padding: 18px;
+        font-size: 25px;
+        letter-spacing: 10px;
+    }
+
+    h3, h2, p{
+        text-align:center;
+        
+    }
+    h3, h2{
+        color: #5afbca
+    }
+
+    #about{
+        color: white;
+        background-color: #091b24;
+        text-align:center;
+        padding:50px 80px;
+        text-align: justify;
+        min-height: 60vh;
+        border-bottom: 2px solid #5afbca;
+
+    }
+    
+    #contact{
+        color: white;
+        background-color:#091b24;
+        text-align:center;
+        padding:50px 80px;
+        text-align: justify;
+        min-height:60vh;
+
+    }
+
+    #about a, #contact a{
+        color: #ea6459;
+    }
+
+    /*desktop footer*/    
+    footer{
+        text-align: center;
+    }
+
+    
+}
+
+/*DESKTOP*/
+
+@media(min-width: 601px){
+
+    /*Navbar*/
+
+   
+    .navbar {
+        overflow: hidden;
+        background-color: #091b24;
+        position: fixed; 
+        top: 0; 
+        width: 100%;
+        text-align: center;
+        border-bottom: 2px solid #1c303a;
+
+    }
+    
+    .navbar a {
+        display: inline-block;
+        color: white;
+        text-align: center;
+        padding: 10px 16px;
+        text-decoration: none;
+    }
+    
+    .navbar a:hover {
+        background: #5afbca;
+        color: #26444f;
+    }
+    
+
+    /*Navbar ends*/
+
+
+    .bgimg {
+        background-image: url("../img/saimaasec.jpg");
+        height:100vh;
+        min-height: 80%;
+        position: relative;
+        opacity: 0.65;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .caption {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        color: #000;
+    }
+
+    .caption span.border {
+        background-color: #111;
+        color: #fff;
+        padding: 18px;
+        font-size: 25px;
+        letter-spacing: 10px;
+    }
+
+    h3, h2, p{
+        text-align:center;
+        
+    }
+    h3, h2{
+        color: #5afbca
+    }
+
+    #about{
+        color: white;
+        background-color: #091b24;
+        text-align:center;
+        padding:70px 80px;
+        text-align: justify;
+        min-height: 50vh;
+        border-bottom: 2px solid #5afbca;
+
+    }
+
+    #contact{
+        color: white;
+        background-color:#091b24;
+        text-align:center;
+        padding:70px 80px;
+        text-align: justify;
+        min-height:50vh;
+
+    }
+
+    #about a, #contact a{
+        color: #ea6459;
+    }
+
+    /*Mobile footer*/
+    footer{
+        text-align: center;
+    }
+
+}
