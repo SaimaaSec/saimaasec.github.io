@@ -1,0 +1,92 @@
+/*Colors:
+Text blue:          #5afbca 
+Text red border:    #ea6459
+hoodie base:        #26444f
+hoodie shadow:      #1c303a
+background:         #091b24
+
+*/
+
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+body, html {
+  height: 100%;
+  color: white;
+  background-color: #091b24;
+  line-height: 1.8;
+}
+
+/* Create a Parallax Effect */
+.bgimg-1, .bgimg-2, .bgimg-3 {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* First image (Logo. Full height) */
+.bgimg-1 {
+  background-image: url("../img/saimaasec.jpg");
+  min-height: 100%;
+  background-color: #00141F;
+  color: #777;
+}
+
+/* Second image (Portfolio) */
+.bgimg-2 {
+  /* background-image: url("img/saimaasec.jpg"); */
+  background-color: #26444f;
+  min-height: 400px;
+}
+
+/* Third image (Contact) */
+.bgimg-3 {
+  /* background-image: url("img/saimaasec.jpg"); */
+  background-color: #091b24;
+  min-height: 400px;
+}
+
+.bgimg-4 {
+    background-color: #26444f;
+    min-height: 400px;
+}
+
+.w3-wide {letter-spacing: 10px;}
+.w3-hover-opacity {cursor: pointer;}
+
+.w3-top {
+    color: white;
+    background-color: #091b24;
+}
+
+.topic-header {
+  color: #5afbca;
+  margin-bottom: auto;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.invoicing-details, .social-media {
+  color: #5afbca;
+}
+
+h1, h2, h3 {
+    color: #5afbca;
+}
+
+a{
+  color: #ea6459;
+}
+
+footer {
+  width: 100%;
+  margin: 0;
+}
+
+/* Turn off parallax scrolling for tablets and phones */
+@media only screen and (max-device-width: 1600px) {
+  .bgimg-1, .bgimg-2, .bgimg-3 {
+    background-attachment: scroll;
+    min-height: 400px;
+  }
+}
+

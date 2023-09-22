@@ -1,63 +1,178 @@
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<html>
+<head>
+<title>SaimaaSec ry</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css\styles.css">
+</head>
+<body>
 
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>SaimaaSec</title>
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar" id="myNavbar">
+    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <a href="#home" class="w3-bar-item w3-button">HOME</a>
+    <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-question-circle"></i> ABOUT</a>
+    <a href="#board-members" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-th"></i> SAIMAASEC BOARD</a>
+    <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i> CONTACT</a>
+    <a href="http://liity.saimaasec.fi/" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user-plus"></i> JOIN SAIMAASEC</a>
+  </div>
 
-  </head>
-  <body>
+  <!-- Navbar on small screens -->
+  <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium">
+    <a href="#about" class="w3-bar-item w3-button" onclick="toggleFunction()">ABOUT</a>
+    <a href="#board-members" class="w3-bar-item w3-button" onclick="toggleFunction()">SAIMAASEC BOARD</a>
+    <a href="#portfolio" class="w3-bar-item w3-button" onclick="toggleFunction()">SAIMAASEC RULES</a>
+    <a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACT</a>
+    <a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">JOIN SAIMAASEC</a>
+  </div>
+</div>
 
-    <div class="bgimg" id="home">
-        <div class="caption">
-        <span class="border">
-            SaimaaSec
-        </span>
-        </div>
+<!-- SaimaaSec cover image with text-->
+<div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+  <div class="w3-display-middle" style="white-space:nowrap;">
+    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">SAIMAASEC ry</span>
+  </div>
+</div>
+
+<!-- Container (About Section) -->
+  <div class="w3-content w3-container w3-padding-64" id="about">
+    <div class="w3-display-container topic-header">
+      <div class="w3-display-middle">
+        <span class="w3-xxlarge w3-wide">ABOUT</span>
+      </div>
     </div>
- <!--Navbar-->
-    <div class="navbar">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+    <br>  
+  <div>
+    <p>Information security community from the South-East Finland, mainly in Lappeenranta region.
+      <br/>We organise meetups and community events on a regular basis.
+      <br/>We welcome anyone interested on information security, whether you are a student, professional or just curious on infosec. 
+      <br/>Part of <a href="https://citysec.fi/">#Citysec</a>
+    </p>
+  </div>
+</div>
+
+
+<!-- Container (Board section) -->
+<div class="w3-content w3-container w3-padding-64" id="board-members">
+  <div class="w3-display-container topic-header">
+    <div class="w3-display-middle">
+      <span class="w3-xxlarge w3-wide">BOARD MEMBERS</span>
     </div>
-<!--Navbar ends-->
+  </div>
+  <br>
 
+  <p class="w3-center w3-padding-32"><em>Meet the SaimaaSec board<br> Click on the images to make them bigger</em></p><br>
 
-
-
-
-    <div id="about">
-        <h2>About</h2>
-        <p>Information security community from the South-East Finland, mainly in Lappeenranta region.
-            <br/>We organise meetups and community events on a regular basis.
-            <br/>We welcome anyone interested on information security, whether you are a student, professional or just curious on infosec. 
-            <br/>Part of <a href="https://citysec.fi/">#Citysec</a>
-        </p>
+  <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
+  <div class="w3-row-padding w3-center">
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Riku Tarkiainen">
+      <b>Chairman</b>
+      <p>Riku Tarkiainen</p>
     </div>
 
-    <div id="contact">
-        
-        <h2>Contact</h2>
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Jari Nousiainen">
+      <b>Vice Chairman</b>
+      <p>Jari Nousiainen</p>
+    </div>
+
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Antti Poutiainen">
+      <b>Secretary</b>
+      <p>Antti Poutiainen</p>
+    </div>
+
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Sampo Ahokas">
+    <b>Treasurer</b>
+      <p>Sampo Ahokas</p>
+    </div>
+  </div>
+
+  <div class="w3-row-padding w3-center w3-section">
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Pauliina Mäkinen">
+    <b>Board member</b>
+      <p>Pauliina Mäkinen</p>
+    </div>
+
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Teemu Reponen">
+      <b>Board member</b>
+      <p>Teemu Reponen</p>
+    </div>
+
+    <div class="w3-col m3">
+      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Joni Laakso">
+      <b>Board member</b>
+      <p>Joni Laakso</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for full size images on click-->
+<div id="modal01" class="w3-modal w3-black" onclick="this.style.display='none'">
+  <span class="w3-button w3-large w3-black w3-display-topright" title="Close Modal Image"><i class="fa fa-remove"></i></span>
+  <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+    <img id="img01" class="w3-image">
+    <p id="caption" class="w3-opacity w3-large"></p>
+  </div>
+</div>
+
+<!--Container: Contact section-->>
+<div class="w3-content w3-container w3-padding-64 w3-margin-bottom" id="contact">
+  <div class="w3-display-container w3-opacity-min topic-header">
+    <div class="w3-display-middle">
+      <span class="w3-xxlarge w3-wide">CONTACT</span>
+    </div>
+  </div>
+  <br>
+  <div class="w3-center">
+    <div class="w3-xlarge w3-section w3-center">
+      <div class="contact-email">
         <p>SaimaaSec ry, 3374096-1</p>
         <p>Email: <b>info</b> at <b>saimaasec</b> dot <b>com</b></p>
-        <p>Invoicing details: 
-            <br \>E-invoicing address: 003733740961
-            <br \>E-invoicing operator: Maventa (003721291126)
+      </div>
+      <div class="contact-invoicing-details w3-center">
+        <p> 
+          <span class="invoicing-details">Invoicing details:</span>
+          <br />E-invoicing address: 003733740961
+          <br />E-invoicing operator: Maventa (003721291126)
         </p>
-        <h3>Social media</h3>
-        <p><a href="https://twitter.com/saimaasec">Twitter</a> | <a href="https://instagram.com/saimaasec">Instagram</a></p>
-        <h2>Events</h2>
-        <p><a href="https://www.meetup.com/saimaasec/">Meetup</a></p>
-        <h2>Swag</h2>
-        <p><a href="https://selosella.fi/category/59/saimaa-sec-tuotteet">SaimaaSec Swag</a></p>
-        <h2>Join SaimaaSec ry</h2>
-        <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSe9r_Dnnu39Y4yaSoTtpjf7ZcWovBHtHNM71G_8CfTs5NM90w/viewform">Fill out membership form here</a></p>
+        <div class="contact-social-media w3-xlarge">
+          <span class="social-media">Social Media: </span>
+          <br />
+          <a href="https://twitter.com/saimaasec"><i class="fa fa-x-twitter w3-hover-opacity"> X</i></a>
+          <br />
+          <a href="https://instagram.com/saimaasec"><i class="fa fa-instagram w3-hover-opacity"> Instagram</i></a> 
+          <br />
+          <a href="https://www.linkedin.com/company/saimaasec/"><i class="fa fa-linkedin w3-hover-opacity"> Linkedin</i></a>
+          <br />
+        </div>
+      </div>
     </div>
-    <footer>&copy; SaimaaSec 2023</footer>
-  </body>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off ">
+  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+  <div class="w3-xlarge w3-section">
+    <a href="https://instagram.com/saimaasec"><i class="fa fa-instagram w3-hover-opacity"></i></a>
+    <a href="https://twitter.com/saimaasec"><i class="fa fa-times w3-hover-opacity w3-margin-right w3-margin-left"></i></a>
+    <a href="https://www.linkedin.com/company/saimaasec/"><i class="fa fa-linkedin w3-hover-opacity"></i></a>
+  </div>
+  <p>© SaimaaSec ry (3374096-1), 2023</p>
+</footer>
+ 
+<script src="scripts/script.js"></script>
+</body>
 </html>
