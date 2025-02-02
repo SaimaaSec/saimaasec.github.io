@@ -82,11 +82,63 @@ footer {
   margin: 0;
 }
 
+
+.support-members-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 200px;
+  margin-bottom: 5%;
+
+}
+
+.support-members-row-two {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  
+}
+
+.co-operation-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  max-width: 100%;;
+  margin-bottom: 5%;
+  margin-top: 5%;
+}
+
 /* Turn off parallax scrolling for tablets and phones */
 @media only screen and (max-device-width: 1600px) {
   .bgimg-1, .bgimg-2, .bgimg-3 {
     background-attachment: scroll;
     min-height: 400px;
+  }
+  .support-members-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10%;
+    height: 60%;
+    width: 100%;
+  }
+
+  .support-members-row .img_size {
+    height: 200px;
+  
+  }
+
+
+  .support-members-row-two {
+    flex-direction: column;
+    max-height: 40%;
+  }
+
+  .co-operation-row {
+    flex-direction: column;
+  }
+
+  .co-operation-row a {
+    margin: 10px;
   }
 }
 
