@@ -96,7 +96,7 @@ footer {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  
+  height: 150px;;
 }
 
 .co-operation-row {
