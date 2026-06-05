@@ -1,259 +1,475 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>SaimaaSec ry</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/x-icon" href="img/favicon.ico">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css\styles.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SaimaaSec ry — Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#06090b;
+    --bg2:#0a0f0d;
+    --panel:#0b1310;
+    --panel2:#0e1814;
+    --line:rgba(79,247,200,.16);
+    --line-strong:rgba(79,247,200,.34);
+    --ink:#bfcdc6;
+    --ink-dim:#6f8279;
+    --mint:#4ff7c8;
+    --mint-bright:#74ffd8;
+    --red:#ff5d5d;
+    --amber:#ffcf6b;
+    --r:4px;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--mono);font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;letter-spacing:.01em;
+    background-image:
+      radial-gradient(900px 500px at 80% -5%,rgba(79,247,200,.07),transparent 60%),
+      radial-gradient(700px 600px at -5% 30%,rgba(255,93,93,.045),transparent 55%);
+  }
+  /* scanline + flicker overlay */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
+    background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.16) 3px,rgba(0,0,0,0) 4px);
+    mix-blend-mode:multiply;opacity:.5;
+  }
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  .mint{color:var(--mint)}
+  .red{color:var(--red)}
+  .dim{color:var(--ink-dim)}
+
+  /* ---------- nav ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(6,9,11,.82);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;gap:18px;height:64px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.02em;color:#eaf4f0}
+  .brand img{width:30px;height:30px;border-radius:5px;border:1px solid var(--line)}
+  .brand b{color:var(--mint)}
+  .brand .blink{color:var(--mint);animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  nav .links{display:none;gap:4px;margin-left:auto;align-items:center}
+  nav .links a{padding:7px 11px;font-size:13px;color:var(--ink-dim);border:1px solid transparent;border-radius:var(--r);transition:.15s}
+  nav .links a:hover{color:var(--mint);border-color:var(--line)}
+  nav .cta{margin-left:auto;display:flex;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;font-weight:700;
+    padding:9px 15px;border-radius:var(--r);border:1px solid var(--line-strong);color:var(--mint);cursor:pointer;transition:.15s;background:transparent}
+  .btn:hover{background:rgba(79,247,200,.1);box-shadow:0 0 0 1px var(--line-strong),0 0 22px rgba(79,247,200,.18)}
+  .btn.solid{background:var(--mint);color:#04130e;border-color:var(--mint)}
+  .btn.solid:hover{background:var(--mint-bright);box-shadow:0 0 26px rgba(79,247,200,.35)}
+  .btn.red{color:var(--red);border-color:rgba(255,93,93,.4)}
+  .btn.red:hover{background:rgba(255,93,93,.1);box-shadow:0 0 22px rgba(255,93,93,.16)}
+  @media(min-width:900px){nav .links{display:flex}nav .cta{margin-left:0}}
+
+  /* ---------- mobile hamburger (CSS-only toggle) ---------- */
+  .nav-toggle{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;clip-path:inset(50%)}
+  .burger{display:none;margin-left:auto;width:42px;height:42px;flex:0 0 auto;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    border:1px solid var(--line);border-radius:var(--r);background:transparent;cursor:pointer;transition:.15s}
+  .burger:hover{border-color:var(--line-strong)}
+  .burger span{display:block;width:18px;height:2px;background:var(--mint);border-radius:2px;transition:transform .22s ease,opacity .16s}
+  .mobile-menu{max-height:0;overflow:hidden;background:rgba(6,9,11,.98);border-bottom:0 solid var(--line);transition:max-height .28s ease}
+  .mobile-menu .inner{display:flex;flex-direction:column;gap:2px;padding:8px 28px 20px}
+  .mobile-menu .mlink{padding:13px 4px;font-size:15px;color:var(--ink);border-bottom:1px solid var(--line);transition:.15s}
+  .mobile-menu .mlink:hover{color:var(--mint);padding-left:8px}
+  .mobile-menu .mcta{display:flex;gap:10px;margin-top:16px}
+  .mobile-menu .mcta .btn{flex:1;justify-content:center;padding:12px}
+  @media(min-width:900px){.mobile-menu{display:none}}
+  @media(max-width:899px){
+    nav .cta{display:none}
+    .burger{display:flex}
+    .nav-toggle:checked ~ .mobile-menu{max-height:400px;border-bottom-width:1px}
+    .nav-toggle:checked ~ nav .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-toggle:checked ~ nav .burger span:nth-child(2){opacity:0}
+    .nav-toggle:checked ~ nav .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  }
+
+  section{padding:84px 0;position:relative}
+  .eyebrow{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);display:flex;align-items:center;gap:9px}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--line-strong)}
+  h2{font-size:clamp(26px,4vw,40px);line-height:1.1;margin:.5em 0 0;color:#eef6f2;font-weight:800;letter-spacing:-.01em}
+  .lead{color:var(--ink-dim);max-width:60ch}
+
+  /* ---------- hero / terminal window ---------- */
+  .hero{padding-top:54px;padding-bottom:64px}
+  .term{border:1px solid var(--line-strong);border-radius:8px;background:linear-gradient(180deg,var(--panel2),var(--panel));
+    box-shadow:0 0 0 1px rgba(0,0,0,.4),0 40px 90px -40px rgba(0,0,0,.9),inset 0 0 60px rgba(79,247,200,.03);overflow:hidden}
+  .term-bar{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.015)}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+  .term-bar .title{margin-left:8px;font-size:12.5px;color:var(--ink-dim)}
+  .term-body{padding:30px clamp(20px,4vw,44px) 40px}
+  .prompt{color:var(--ink-dim);font-size:14px}
+  .prompt b{color:var(--mint);font-weight:700}
+  .prompt .path{color:#7fb6ff}
+  .cmd{color:#eef6f2}
+  .term h1{font-size:clamp(34px,6vw,68px);line-height:.98;margin:18px 0 6px;color:#fff;font-weight:800;letter-spacing:-.02em}
+  .term h1 .x{color:var(--mint);text-shadow:0 0 30px rgba(79,247,200,.4)}
+  .tag{color:var(--ink);font-size:clamp(15px,2vw,19px);max-width:62ch;margin:14px 0 0}
+  .tag .red{font-weight:700}
+  .out{margin:22px 0 0;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:var(--ink-dim)}
+  .out span .ok{color:var(--mint)}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;padding-top:22px;border-top:1px dashed var(--line);font-size:13px;color:var(--ink-dim)}
+  .hero-meta b{color:var(--ink)}
+  .term-grid{display:grid;gap:30px}
+  .term-aside{align-self:center}
+  .logo-frame{border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;background:#0d1b27;
+    box-shadow:0 0 46px -16px rgba(79,247,200,.45),inset 0 0 0 1px rgba(0,0,0,.3);max-width:260px;margin:0 auto}
+  .logo-frame img{width:100%;display:block}
+  .logo-cap{font-size:11.5px;color:var(--ink-dim);letter-spacing:.03em;margin-top:11px;text-align:center}
+  @media(min-width:820px){.term-grid{grid-template-columns:1fr minmax(0,300px);align-items:center;gap:44px}.logo-frame{max-width:300px}}
+
+  /* ---------- about ---------- */
+  .grid2{display:grid;gap:40px}
+  @media(min-width:860px){.grid2{grid-template-columns:1.1fr .9fr;align-items:start}}
+  .about-body p{margin:18px 0 0;color:#c4d2cb}
+  .about-body p.lead-first{font-size:18px;color:#dfeae5}
+  .ascii{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:22px;white-space:pre;font-size:12px;line-height:1.5;color:var(--mint);overflow:auto}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+  .chip{font-size:12.5px;padding:6px 12px;border:1px solid var(--line);border-radius:100px;color:var(--ink);background:var(--panel)}
+  .chip span{color:var(--mint)}
+
+  /* ---------- events ---------- */
+  .ev{display:grid;gap:14px}
+  .ev-row{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;padding:20px 22px;border:1px solid var(--line);border-radius:8px;background:var(--panel);transition:.18s}
+  .ev-row:hover{border-color:var(--line-strong);background:var(--panel2);transform:translateX(3px)}
+  .ev-date{text-align:center;min-width:64px}
+  .ev-date .d{font-size:26px;font-weight:800;color:var(--mint);line-height:1}
+  .ev-date .m{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin-top:5px}
+  .ev-main h3{margin:0;font-size:17px;color:#eef6f2;font-weight:700}
+  .ev-main p{margin:5px 0 0;font-size:13px;color:var(--ink-dim)}
+  .ev-tag{font-size:11px;padding:5px 10px;border-radius:100px;border:1px solid var(--line);color:var(--mint);white-space:nowrap}
+  .ev-tag.full{color:var(--red);border-color:rgba(255,93,93,.35)}
+  .ev-cta{margin-top:8px}
+
+  /* ---------- board ---------- */
+  .board{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(min-width:640px){.board{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:980px){.board{grid-template-columns:repeat(4,1fr)}}
+  .member{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:18px;transition:.18s}
+  .member:hover{border-color:var(--line-strong);box-shadow:0 0 30px -12px rgba(79,247,200,.4)}
+  .avatar{width:54px;height:54px;border-radius:7px;border:1px solid var(--line-strong);display:grid;place-items:center;
+    font-weight:800;font-size:18px;color:var(--mint);background:radial-gradient(circle at 30% 25%,rgba(79,247,200,.16),transparent 70%),var(--panel2)}
+  .member .role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin:16px 0 3px}
+  .member .name{font-size:15px;font-weight:700;color:#eef6f2}
+  .member.lead-card{border-color:var(--line-strong);background:linear-gradient(180deg,var(--panel2),var(--panel))}
+  .member.lead-card .role{color:var(--mint)}
+
+  /* ---------- supporters ---------- */
+  .lbl{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);margin:0 0 16px}
+  .logos{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media(min-width:560px){.logos{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:880px){.logos{grid-template-columns:repeat(4,1fr)}}
+  .logo-tile{border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:18px 16px;display:flex;align-items:center;justify-content:center;
+    min-height:74px;color:var(--ink);font-weight:700;font-size:14px;text-align:center;transition:.16s}
+  .logo-tile:hover{border-color:var(--line-strong);color:var(--mint);background:var(--panel2)}
+  .logo-tile.sm{font-size:13px;color:var(--ink-dim)}
+  .logo-tile img{max-height:40px;max-width:82%;width:auto;object-fit:contain;border-radius:4px;transition:transform .16s,filter .16s;opacity:.92}
+  .logo-tile:hover img{transform:scale(1.04);opacity:1}
+  .logo-tile.boost img{opacity:1;filter:brightness(1.5) contrast(1.05) saturate(1.1)}
+  .logo-tile.big img{max-height:50px;max-width:90%}
+
+  /* ---------- contact ---------- */
+  .contact-card{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:30px}
+  .kv{display:flex;flex-direction:column;gap:2px;margin-bottom:20px}
+  .kv .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .kv .v{color:#dfeae5;font-size:15px}
+  .kv .v a{color:var(--mint)}
+  .social{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
+  .social a{font-size:13px;padding:8px 13px;border:1px solid var(--line);border-radius:var(--r);color:var(--ink);transition:.15s}
+  .social a:hover{color:var(--mint);border-color:var(--line-strong)}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--ink-dim);font-size:13px}
+  .foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+  .totop{color:var(--mint)}
+  .divider{display:flex;align-items:center;gap:14px;color:var(--line-strong);font-size:12px;margin:0}
+  .divider::before,.divider::after{content:"";height:1px;background:var(--line);flex:1}
+
+  /* ---------- mobile hardening ---------- */
+  @media(max-width:560px){
+    .wrap{padding:0 18px}
+    section{padding:58px 0}
+    .hero{padding-top:32px;padding-bottom:44px}
+    nav{gap:12px;height:60px}
+    .btn{padding:8px 12px}
+    .term-body{padding:24px 18px 32px}
+    /* events: stack date+title, then a full-width status/CTA row */
+    .ev-row{grid-template-columns:auto 1fr;gap:12px 16px;padding:18px}
+    .ev-row > div:last-child{grid-column:1 / -1;flex-direction:row !important;align-items:center !important;justify-content:space-between;margin-top:4px}
+    .hero-meta{gap:8px 18px}
+  }
+</style>
 </head>
 <body>
-
-<!-- Navbar (sit on top) -->
-<div class="w3-top">
-  <div class="w3-bar" id="myNavbar">
-    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
-      <i class="fa fa-bars"></i>
-    </a>
-    <a href="#home" class="w3-bar-item w3-button">HOME</a>
-    <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-question-circle"></i> ABOUT</a>
-    <a href="#board-members" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-th"></i> SAIMAASEC BOARD</a>
-    <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i> CONTACT</a>
-    <a href="http://liity.saimaasec.fi/" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user-plus"></i> JOIN SAIMAASEC</a>
-    <a href="http://kannata.saimaasec.fi/" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user-plus"></i> SUPPORT SAIMAASEC</a>
-        <a href="./2026-dates.jpg" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-question-circle"></i>2026 IMPORTANT DATES</a>
-
-  </div>
-
-  <!-- Navbar on small screens -->
-  <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium">
-    <a href="#about" class="w3-bar-item w3-button" onclick="toggleFunction()">ABOUT</a>
-    <a href="#board-members" class="w3-bar-item w3-button" onclick="toggleFunction()">SAIMAASEC BOARD</a>
-    <a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACT</a>
-    <a href="http://liity.saimaasec.fi/" class="w3-bar-item w3-button" onclick="toggleFunction()">JOIN SAIMAASEC</a>
-    <a href="http://kannata.saimaasec.fi/" class="w3-bar-item w3-button" onclick="toggleFunction()">SUPPORT SAIMAASEC</a>
-    <a href="./2026-dates.jpg" class="w3-bar-item w3-button" onclick="toggleFunction()">2026 IMPORTANT DATES</a>
-  </div>
-</div>
-
-<!-- SaimaaSec cover image with text-->
-<div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
-  <div class="w3-display-middle" style="white-space:nowrap;">
-    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">SAIMAASEC ry</span>
-  </div>
-</div>
-
-<!-- Container (About Section) -->
-  <div class="w3-content w3-container w3-padding-64" id="about">
-    <div class="w3-display-container topic-header">
-      <div class="w3-display-middle">
-        <span class="w3-xxlarge w3-wide">ABOUT</span>
+<header>
+  <input type="checkbox" id="navtoggle" class="nav-toggle" aria-hidden="true" />
+  <nav class="wrap">
+    <a class="brand" href="#home"><img src="assets/saimaasec-logo.jpg" alt="SaimaaSec" /><span>saimaa<b>sec</b><span class="blink">_</span></span></a>
+    <div class="links">
+      <a href="#about">./about</a>
+      <a href="#events">./events</a>
+      <a href="#board">./board</a>
+      <a href="#contact">./contact</a>
+    </div>
+    <label for="navtoggle" class="burger" aria-label="Toggle menu" role="button"><span></span><span></span><span></span></label>
+    <div class="cta">
+      <a class="btn solid" href="http://liity.saimaasec.fi/">join</a>
+      <a class="btn red" href="http://kannata.saimaasec.fi/">support</a>
+    </div>
+  </nav>
+  <div class="mobile-menu">
+    <div class="inner">
+      <a class="mlink" href="#about">./about</a>
+      <a class="mlink" href="#events">./events</a>
+      <a class="mlink" href="#board">./board</a>
+      <a class="mlink" href="#contact">./contact</a>
+      <div class="mcta">
+        <a class="btn solid" href="http://liity.saimaasec.fi/">$ join</a>
+        <a class="btn red" href="http://kannata.saimaasec.fi/">support</a>
       </div>
     </div>
-    <br>  
-  <div>
-    <p>Information security community from the South-East Finland, mainly in Lappeenranta region.
-      <br/>We organise meetups and community events on a regular basis.
-      <br/>We welcome anyone interested on information security, whether you are a student, professional or just curious on infosec. 
-      <br/>Part of <a href="https://citysec.fi/">#Citysec</a>
-    </p>
   </div>
-</div>
+</header>
 
-
-<!-- Container (Board section) -->
-<div class="w3-content w3-container w3-padding-64" id="board-members">
-  <div class="w3-display-container topic-header">
-    <div class="w3-display-middle">
-      <span class="w3-xxlarge w3-wide">BOARD MEMBERS</span>
-    </div>
-  </div>
-  <br>
-
-  <p class="w3-center w3-padding-32"><em>Meet the SaimaaSec board<br> Click on the images to make them bigger</em></p><br>
-
-  <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
-  <div class="w3-row-padding w3-center">
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Riku Tarkiainen">
-      <b>Chairman</b>
-      <p>Riku Tarkiainen</p>
-    </div>
-
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Jari Nousiainen">
-      <b>Vice Chairman</b>
-      <p>Jari Nousiainen</p>
-    </div>
-
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Antti Poutiainen">
-      <b>Secretary</b>
-      <p>Antti Poutiainen</p>
-    </div>
-
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Sampo Ahokas">
-    <b>Treasurer</b>
-      <p>Sampo Ahokas</p>
-    </div>
-  </div>
-
-  <div class="w3-row-padding w3-center w3-section">
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Pauliina Karjalainen">
-    <b>Board member</b>
-      <p>Pauliina Karjalainen</p>
-    </div>
-
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Teemu Reponen">
-      <b>Board member</b>
-      <p>Teemu Reponen</p>
-    </div>
-
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Joni Laakso">
-      <b>Board member</b>
-      <p>Joni Laakso</p>
-    </div>
-
-    <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Emmi Turunen">
-      <b>Board member</b>
-      <p>Emmi Turunen</p>
-    </div>
-  </div>
-
-  <div class="w3-row-padding w3-center w3-section">
-        <div class="w3-col m3">
-      <img src="img/saimaa-sec-placeholder.png" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Olli Karjalainen">
-      <b>Board member</b>
-      <p>Olli Karjalainen</p>
-    </div>
-  </div>
-
-</div>
-
-<!-- Modal for full size images on click-->
-<div id="modal01" class="w3-modal w3-black" onclick="this.style.display='none'">
-  <span class="w3-button w3-large w3-black w3-display-topright" title="Close Modal Image"><i class="fa fa-remove"></i></span>
-  <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
-    <img id="img01" class="w3-image">
-    <p id="caption" class="w3-opacity w3-large"></p>
-  </div>
-</div>
-
-<!--Container: Contact section-->
-<div class="w3-content w3-container w3-padding-64 w3-margin-bottom" id="contact">
-  <div class="w3-display-container w3-opacity-min topic-header">
-    <div class="w3-display-middle">
-      <span class="w3-xxlarge w3-wide">CONTACT</span>
-    </div>
-  </div>
-  <br>
-  <div class="w3-center">
-    <div class="w3-xlarge w3-section w3-center">
-      <div class="contact-email">
-        <p>SaimaaSec ry, 3374096-1</p>
-        <p>Email: <b>info</b> at <b>saimaasec</b> dot <b>com</b></p>
+<main id="home">
+  <!-- HERO -->
+  <section class="hero" data-screen-label="Hero">
+    <div class="wrap">
+      <div class="term">
+        <div class="term-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="title">saimaasec@citysec: ~/community</span>
+        </div>
+        <div class="term-body">
+          <div class="term-grid">
+          <div class="term-main">
+          <div class="prompt"><b>saimaasec@citysec</b>:<span class="path">~</span>$ whoami</div>
+          <h1>SaimaaSec ry<span class="x">_</span></h1>
+          <p class="tag">An <span class="mint">information security community</span> from South-East Finland — based mainly in the <span class="mint">Lappeenranta</span> region. We run meetups &amp; community events on a regular basis. Students, professionals or just <span class="red">curious</span> — everyone's welcome.</p>
+          <div class="out">
+            <span><span class="ok">[ ok ]</span> region ......... Saimaa / Lappeenranta, FI</span>
+            <span><span class="ok">[ ok ]</span> network ........ part of #Citysec</span>
+            <span><span class="ok">[ ok ]</span> status ......... accepting new members</span>
+          </div>
+          <div class="hero-cta">
+            <a class="btn solid" href="http://liity.saimaasec.fi/">$ join saimaasec</a>
+            <a class="btn" href="https://www.meetup.com/saimaasec/">next meetup →</a>
+            <a class="btn red" href="http://kannata.saimaasec.fi/">support us</a>
+          </div>
+          <div class="hero-meta">
+            <span>uptime: <b>since 2023</b></span>
+            <span>members: <b>open community</b></span>
+            <span>chapter: <b>#Citysec</b></span>
+          </div>
+          </div>
+          <div class="term-aside">
+            <div class="logo-frame"><img src="assets/saimaasec-logo.jpg" alt="SaimaaSec seal mascot" /></div>
+            <div class="logo-cap">// saimaasec.png — the hooded Saimaa seal</div>
+          </div>
+          </div>
+        </div>
       </div>
-      <div class="contact-invoicing-details w3-center">
-        <p> 
-          <span class="invoicing-details">Invoicing details:</span>
-          <br />E-invoicing address: 003733740961
-          <br />E-invoicing operator: Maventa (003721291126)
-        </p>
-        <div class="contact-social-media w3-xlarge">
-          <span class="social-media">Social Media: </span>
-          <br />
-          <a href="https://twitter.com/saimaasec"><i class="fa fa-x-twitter w3-hover-opacity"> X</i></a>
-          <br />
-          <a href="https://instagram.com/saimaasec"><i class="fa fa-instagram w3-hover-opacity"> Instagram</i></a> 
-          <br />
-          <a href="https://www.linkedin.com/company/saimaasec/"><i class="fa fa-linkedin w3-hover-opacity"> Linkedin</i></a>
-          <br />
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" data-screen-label="About">
+    <div class="wrap grid2">
+      <div class="about-body">
+        <div class="eyebrow">$ cat about.md</div>
+        <h2>A local hub for infosec people.</h2>
+        <p class="lead-first">SaimaaSec ry is a non-profit association building an open, friendly information-security community around the Saimaa region.</p>
+        <p>We organise regular meetups and community events where people share talks, hands-on sessions, war stories and a good amount of sauna-grade conversation. No gatekeeping — whether you defend networks for a living, study at university, or simply find security fascinating, there's a seat for you.</p>
+        <p>We're part of <span class="mint"><a href="https://citysec.fi/">#Citysec</a></span>, the network of Finnish city-based security communities.</p>
+        <div class="chips">
+          <span class="chip"><span>#</span> meetups</span>
+          <span class="chip"><span>#</span> talks</span>
+          <span class="chip"><span>#</span> students welcome</span>
+          <span class="chip"><span>#</span> professionals welcome</span>
+          <span class="chip"><span>#</span> infosec curious people welcome</span>
+          <span class="chip"><span>#</span> non-profit</span>
         </div>
-        <div class="contact-events w3-xlarge">
-          <span class="events">SaimaaSec Events:</span>
-          <br />
-          <a href="https://www.meetup.com/saimaasec/"><i class="fa fa-meetup w3-hover-opacity"> Meetup</i></a>
-          <br />
+      </div>
+      <div class="ascii">
+##################################################
+#######################++#########################
+#################+--+++###########################
+###############+--+#######++++-++#################
+#############+--+##############+-+################
+############+-+###############++---+##############
+###########+-+##+-----------++####+-+#############
+##########------+####++########++###++############
+#########+---++#+.--.-+++########++++#############
+########+--+###-....-++++++########++-+###########
+#######+--+###-.........++###########+++##########
+#######-+####---.......-+###-...-######++#########
+######-+####+-..--++-....+#.-++-..######++########
+#####++#####+-..####+......+####-.+######++#######
+####+-+#####+++---+-........-+++++########+#######
+####-+########+++#-..-####+..-+#####+######+######
+###+-+#####++#++#+--...++-...-+##++++######+######
+###+-+####+++++++#+-.-####+.-+##+++++#######+#####
+###+-+###+#++##++++#+......-####++++++############
+####++##+#+-+###+++++###########++++#+############
+####+++###++++++###+###########+++##-+############
+######+####+++++-##++++++#########+#+#############
+####+---+#####+++#+-+++#--+++-+++########+++######
+#+-------+########++---+-#++++#############++++###
+---++----++###########-+-+++################++-+##
+----+###+#############++#+##################+--+##
+~~~~~~~~~~~~~~~~~~Norpheus~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~Nomppanen~~~~~~~~~~~~~~~~~~~~~~~
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section id="events" data-screen-label="Events">
+    <div class="wrap">
+      <div class="eyebrow">$ ./events --upcoming</div>
+      <h2 style="margin-bottom:8px">Upcoming meetups</h2>   
+      <p class="lead" style="margin-bottom:34px">Free to attend, open to everyone. Talks, networking and refreshments. <span class="dim">(Template entries — swap in real dates &amp; sign-up links.)</span></p>
+      <!-- Events start here -->
+      <div class="ev">
+        <div class="ev-row"> 
+          <div class="ev-date"><div class="d">6</div><div class="m">June</div></div>
+          <div class="ev-main"><h3>SaimaaSec Summer Cruise 3.0</h3>
+            <p>The summer kickoff security cruise is here!
+              SummerCruise is coming back bigger and better than ever  and this year the event is proudly sponsored by Accenture! </p>
+            <br/>
+              <p>We invite you and your friends to Lappeenranta for a full day of inspiring talks, great company, relaxed summer vibes, and the stunning scenery of Lake </p>
+            <br/>
+            <p><b>Agenda:</b></p>
+            <p>12:30 - Doors open at Valta Nightclub</p>
+            <p>13:00-16:00 - Talks & program at Valta </p>
+            <p>16:00-17:00 - Move to the harbor </p>
+            <p>17:00-20:00 - Cruise on M/S Camilla </p>
+            <p>20:30-22:00 - Private afterparty at Valta </p>
+
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px"><span class="ev-tag">RSVP open</span><a class="btn" href="https://www.meetup.com/saimaasec/events/312299723/?eventOrigin=group_upcoming_events" style="padding:7px 12px">details</a></div>
         </div>
-        <div class="contact-swag w3-xlarge">
-          <span class="swag">Swag: </span>
-          <br />
-          <a href="https://selosella.fi/category/59/saimaa-sec-tuotteet"><i class="fa fa-shopping-cart w3-hover-opacity"> SaimaaSec Swag</i></a>
-          <br />
+
+        <div class="ev-row">
+          <div class="ev-date"><div class="d">28</div><div class="m">Aug</div></div>
+          <div class="ev-main"><h3>Annual meeting + äfterwörk</h3><p>SaimaaSec annual meeting for all members + after worl. More info TBA!</p></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px"><span class="ev-tag">RSVP open</span><a class="btn" href="https://www.meetup.com/saimaasec/events/313239106/?eventOrigin=group_upcoming_events" style="padding:7px 12px">details</a></div>
         </div>
-       </div>
-    </div>
-  </div>
-</div>
 
-<!-- Container (Support Members Section) -->
-<div class="w3-content w3-container w3-padding-64" id="support-members">
-  <div class="w3-display-container topic-header">
-    <div class="w3-center">
-      <span class="w3-xxlarge w3-wide">SUPPORT MEMBERS</span>
+        <div class="ev-row">
+          <div class="ev-date"><div class="d">12</div><div class="m">Sep</div></div>
+          <div class="ev-main"><h3>SaimaaSec Meetup</h3><p>More info TBA!</p></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px"><span class="ev-tag">save the date</span><a class="btn" href="https://www.meetup.com/saimaasec/events/313239132/?eventOrigin=group_upcoming_events" style="padding:7px 12px">details</a></div>
+        </div>
+        
+        <div class="ev-row">
+          <div class="ev-date"><div class="d">14</div><div class="m">Nov</div></div>
+          <div class="ev-main"><h3>SaimaaSec Pikkujoulu Meetup</h3><p>More info TBA!</p></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px"><span class="ev-tag">save the date</span><a class="btn" href="https://www.meetup.com/saimaasec/events/313239141/?eventOrigin=group_upcoming_events" style="padding:7px 12px">details</a></div>
+        </div>
+      </div>
+      <!--Events end here-->
     </div>
-  </div>
-<div class="w3-center">
-  <p class="w3-center w3-padding-32"><em>Big thanks to all our support members!</em></p>
-  <div class="support-members-container">
-    <div class="support-members-row">
-      <a href="https://www.accenture.com/fi-en" target="_blank"><img src="img/accenture_logo.png" height="55%" class="w3-hover-opacity" alt="Accenture"></a>
-      <a href="https://alpit.io/" target="_blank"><img src="img/alpit-logo.png" height="80%" class="w3-hover-opacity" alt="Alpit Nordic"></a>
-      <a href="https://www.cipherix.fi/" target="_blank"><img src="img/cipherix-logo.png" height="100%" class="w3-hover-opacity img_size" alt="Cipherix"></a>
+  </section>
 
+  <!-- BOARD -->
+  <section id="board" data-screen-label="Board">
+    <div class="wrap">
+      <div class="eyebrow">$ ls ./board</div>
+      <h2 style="margin-bottom:6px">The SaimaaSec board</h2>
+      <p class="lead" style="margin-bottom:34px">Meet the board members.</p>
+      <div class="board">
+        <div class="member lead-card"><div class="avatar">RT</div><div class="role">Chairman</div><div class="name">Riku Tarkiainen</div></div>
+        <div class="member lead-card"><div class="avatar">JN</div><div class="role">Vice Chairman</div><div class="name">Jari Nousiainen</div></div>
+        <div class="member lead-card"><div class="avatar">AP</div><div class="role">Secretary</div><div class="name">Antti Poutiainen</div></div>
+        <div class="member lead-card"><div class="avatar">SA</div><div class="role">Treasurer</div><div class="name">Sampo Ahokas</div></div>
+        <div class="member"><div class="avatar">PK</div><div class="role">Board member</div><div class="name">Pauliina Karjalainen</div></div>
+        <div class="member"><div class="avatar">TR</div><div class="role">Board member</div><div class="name">Teemu Reponen</div></div>
+        <div class="member"><div class="avatar">JL</div><div class="role">Board member</div><div class="name">Joni Laakso</div></div>
+        <div class="member"><div class="avatar">ET</div><div class="role">Board member</div><div class="name">Emmi Turunen</div></div>
+        <div class="member"><div class="avatar">OK</div><div class="role">Board member</div><div class="name">Olli Karjalainen</div></div>
+      </div>
     </div>
-    <div class="support-members-row-two">
-      <a href="" target="_blank"><img src="img/myotatuuli-logo.png" alt="Myötätuuli Consulting"></a>
-      <a href="https://matriset.fi/" target="_blank"><img src="img/matriset-logo.png" class="w3-hover-opacity" alt="Matriset"></a>
-      <a href="https://www.f-secure.com/" target="_blank"><img src="img/f-secure-logo.png" height="50px" class="w3-hover-opacity" alt="F-Secure"></a>
-      <a href="https://sema4.ai/" target="_blank" style="margin-left: 10px;"><img src="img/sema_ai-logo.png" height="40px" class="w3-hover-opacity" alt="sema-ai"></a>
-    </div>
-  </div>
-  </div>
-</div>
+  </section>
 
-<!-- Container (In co-operation Section)  -->
-<div class="w3-content w3-container w3-padding-64" id="support-members">
-  <div class="w3-display-container topic-header">
-    <div class="w3-center">
-      <span class="w3-xxlarge w3-wide">IN CO-OPERATION WITH</span>
+  <!-- SUPPORTERS -->
+  <section id="supporters" data-screen-label="Supporters">
+    <div class="wrap">
+      <div class="eyebrow">$ cat supporters.txt</div>
+      <h2 style="margin-bottom:30px">Big thanks to our supporters</h2>
+      <p class="lbl">// support members</p>
+      <div class="logos">
+        <a class="logo-tile" href="https://www.accenture.com/fi-en" target="_blank" rel="noopener noreferrer"><img src="assets/logos/accenture_logo.png" alt="Accenture" /></a>
+        <a class="logo-tile boost" href="https://alpit.io/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/alpit-logo.png" alt="Alpit Nordic" /></a>
+        <a class="logo-tile" href="https://www.cipherix.fi/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/cipherix-logo.png" alt="Cipherix" /></a>
+        <div class="logo-tile"><img src="assets/logos/myotatuuli-logo.png" alt="Myötätuuli Consulting" /></div>
+        <a class="logo-tile" href="https://matriset.fi/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/matriset-logo.png" alt="Matriset" /></a>
+        <a class="logo-tile" href="https://www.f-secure.com/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/f-secure-logo.png" alt="F-Secure" /></a>
+        <a class="logo-tile" href="https://sema4.ai/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/sema_ai-logo.png" alt="Sema4.ai" /></a>
+        <div class="logo-tile sm">+ your company?</div>
+      </div>
+      <p class="lbl" style="margin-top:34px">// in co-operation with</p>
+      <div class="logos">
+        <a class="logo-tile boost big" href="https://www.women4cyberfinland.com/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/women4cyber-logo.png" alt="Women4Cyber Finland" /></a>
+        <a class="logo-tile" href="https://disobey.fi/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/disobey-logo.png" alt="Disobey" /></a>
+        <a class="logo-tile" href="https://citysec.fi/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/citysec-logo.png" alt="CitySec" /></a>
+        <a class="logo-tile" href="https://selosella.fi/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/selosella-logo.png" alt="Selosella" /></a>
+        <a class="logo-tile" href="https://www.oldcock.fi/" target="_blank" rel="noopener noreferrer"><img src="assets/logos/valta-logo.png" alt="Valta Kukko" /></a>
+      </div>
     </div>
-  </div>
-<div class="w3-center">
-    <div class="co-operation-row">
-      <a href="https://www.women4cyberfinland.com/" target="_blank"><img src="img/women4cyber-logo.png" class="w3-hover-opacity" alt="women4cyber"></a>
-      <a href="https://disobey.fi/" target="_blank"><img src="img/disobey-logo.png" class="w3-hover-opacity" alt="disobey"></a>
-      <a href="https://citysec.fi/" target="_blank"><img src="img/citysec-logo.png" class="w3-hover-opacity" alt="citysec"></a>
-    </div>
-    <div class="co-operation-row">
-      <a href="https://selosella.fi/" target="_blank"><img src="img/selosella-logo.png" class="w3-hover-opacity im" alt="selosella"></a>
-      <a href="https://www.oldcock.fi/" target="_blank"><img src="img/valta-logo.png" class="w3-hover-opacity" alt="valta"></a>
+  </section>
 
+  <!-- CONTACT -->
+  <section id="contact" data-screen-label="Contact">
+    <div class="wrap grid2">
+      <div>
+        <div class="eyebrow">$ ./contact</div>
+        <h2 style="margin-bottom:14px">Get in touch</h2>
+        <p class="lead">Questions, sponsorship, or a talk you'd like to give? Drop us a line or find us at the next meetup.</p>
+        <div class="social">
+          <a href="https://twitter.com/saimaasec">X / Twitter</a>
+          <a href="https://instagram.com/saimaasec">Instagram</a>
+          <a href="https://www.linkedin.com/company/saimaasec/">LinkedIn</a>
+          <a href="https://www.meetup.com/saimaasec/">Meetup</a>
+          <a href="https://selosella.fi/category/59/saimaa-sec-tuotteet">Swag</a>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="kv"><span class="k">Association</span><span class="v">SaimaaSec ry · 3374096-1</span></div>
+        <div class="kv"><span class="k">Email</span><span class="v">info<span class="dim"> [at] </span>saimaasec<span class="dim"> [dot] </span>com</a></span></div>
+        <div class="kv"><span class="k">E-invoicing address</span><span class="v">003733740961</span></div>
+        <div class="kv" style="margin-bottom:0"><span class="k">E-invoicing operator</span><span class="v">Maventa (003721291126)</span></div>
+      </div>
     </div>
-  </div>
-  </div>
-</div>
+  </section>
+</main>
 
-<!-- Footer -->
-<footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off ">
-  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
-  <div class="w3-xlarge w3-section">
-    <a href="https://instagram.com/saimaasec"><i class="fa fa-instagram w3-hover-opacity"></i></a>
-    <a href="https://twitter.com/saimaasec"><i class="fa fa-times w3-hover-opacity w3-margin-left"></i></a>
-    <a href="https://www.linkedin.com/company/saimaasec/"><i class="fa fa-linkedin w3-hover-opacity w3-margin-right w3-margin-left"></i></a>
-    <a href="https://www.meetup.com/saimaasec/"><i class="fa fa-meetup w3-hover-opacity"></i></a>
+<footer>
+  <div class="wrap foot">
+    <span>© SaimaaSec ry (3374096-1), 2026 · <span class="dim">South-East Finland infosec community</span></span>
+    <a class="totop" href="#home">↑ back to top</a>
   </div>
-  <p>© SaimaaSec ry (3374096-1), 2025</p>
 </footer>
- 
-<script src="scripts/script.js"></script>
+
+<script>
+  /* Mobile menu auto-close — optional convenience; open/close still works without JS via the checkbox + label. */
+  (function () {
+    var t = document.getElementById('navtoggle');
+    if (!t) return;
+    document.querySelectorAll('.mobile-menu a').forEach(function (a) {
+      a.addEventListener('click', function () { t.checked = false; });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') t.checked = false; });
+  })();
+</script>
 </body>
 </html>
